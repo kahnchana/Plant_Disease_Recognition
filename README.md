@@ -2,13 +2,13 @@
 Raspberry Pi based system to detect and recognize plant diseases.
 
 ## Dependencies
-Raspberry Pi 3
-Raspberry Pi Camera
-Raspberry Pi NoIR Camera
-Python 2.7
-Tensorflow Library
-OpenCV Python Library
-Tkinter Library
+* Raspberry Pi 3
+* Raspberry Pi Camera
+* Raspberry Pi NoIR Camera
+* Python 2.7
+* Tensorflow Library
+* OpenCV Python Library
+* Tkinter Library
 
 
 ## Recognition Phase
