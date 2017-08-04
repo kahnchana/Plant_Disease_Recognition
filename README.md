@@ -25,6 +25,8 @@ https://goo.gl/z5kDFg
 Contents of link should be placed within a folder named tf_files. The code above (label_image.py) should be run from within tf_files. 
 The system outputs a probability of the image belonging to each class (healthy and 7 diseases). 
 
+The file to be run on the raspberry pi is main.py. This is configured to run at startup in our system. 
+
 ## Detection Phase
 
 The detection phase makes use of an RGB and NIR video feed to compute NDVI index for plant images. This will be used to detect infected regions in plant fields / greenhouses. 
