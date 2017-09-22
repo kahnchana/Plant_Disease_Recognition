@@ -1,3 +1,10 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Fri Sep 22 20:50:38 2017
+
+@author: hiran
+"""
+
 import time
 import numpy as np
 
@@ -18,7 +25,7 @@ def disp_multiple(im1=None, im2=None, im3=None, im4=None):
     combined[0:height, 0:width, :] = cv2.cvtColor(im1, cv2.COLOR_GRAY2RGB)
     combined[height:, 0:width, :] = cv2.cvtColor(im2, cv2.COLOR_GRAY2RGB)
     combined[0:height, width:, :] = cv2.cvtColor(im3, cv2.COLOR_GRAY2RGB)
-    combined[height:, width:, :] = cv2.applyColorMap(cv2.cvtColor(im4, cv2.COLOR_GRAY2RGB), cv2.COLORMAP_RAINBOW)
+    combined[height:, width:, :] = cv2.cvtColor(im4, cv2.COLOR_GRAY2RGB)
 
     return combined
 
@@ -45,28 +52,6 @@ def contrast_stretch(im):
     out += in_min
 
     return out
-
-
-class ColorMap:
-    startcolor = ()
-    endcolor = ()
-    startmap = 0
-    endmap = 0
-    colordistance = 0
-    valuerange = 0
-    ratios = []    
-
-    def __init__(self, startcolor, endcolor, startmap, endmap):
-        self.startcolor = np.array(startcolor)
-        self.endcolor = np.array(endcolor)
-        self.startmap = float(startmap)
-        self.endmap = float(endmap)
-        self.valuerange = float(endmap - startmap)
-        self.ratios = (self.endcolor - self.startcolor) / self.valuerange
-
-    def __getitem__(self, value):
-        color = tuple(self.startcolor + (self.ratios * (value - self.startmap)))
-        return (int(color[0]), int(color[1]), int(color[2]))
 
 
 def run():

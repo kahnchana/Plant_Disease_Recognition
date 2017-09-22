@@ -39,15 +39,15 @@ import tensorflow as tf
 stopEvent = threading.Event()
 pause_=False
 stop_=False
-outputPath="/home/pi/Documents/Pi_Pro/tf_files"
+outputPath="/home/pi/Documents/RaspChallenge"
 root=tk.Tk()
 root.overrideredirect(True)
 root.geometry("{0}x{1}+0+0".format(root.winfo_screenwidth(), root.winfo_screenheight()))
 print root.winfo_screenwidth(),root.winfo_screenheight()
 
-video=VideoStream(usePiCamera=True,resolution=(640,480)).start()
-video.set(3,1024)
-video.set(4,720)
+#video=VideoStream(usePiCamera=True,resolution=(640,480)).start()
+#video.set(3,1024)
+#video.set(4,720)
 time.sleep(0.2)
 
 def videoLoop():
@@ -97,8 +97,8 @@ def videoLoop():
 						pass
 
 					        
-#function to detect tomato leaves
-def takePicT():
+
+def takePic():
 		# grab the current timestamp and use it to construct the
 		# output path
 		ts = datetime.datetime.now()
@@ -114,10 +114,10 @@ def takePicT():
 		image_path = filename
 		image_data = tf.gfile.FastGFile(image_path, 'rb').read()
 		label_lines = [line.rstrip() for line 
-                   in tf.gfile.GFile("tomato/retrained_labels.txt")]
+                   in tf.gfile.GFile("retrained_labels.txt")]
 				   
 		# Unpersists graph from file
-		with tf.gfile.FastGFile("tomato/retrained_graph.pb", 'rb') as f:
+		with tf.gfile.FastGFile("retrained_graph.pb", 'rb') as f:
 			graph_def = tf.GraphDef()
 			graph_def.ParseFromString(f.read())
 			tf.import_graph_def(graph_def, name='')				   
@@ -137,46 +137,6 @@ def takePicT():
 				score = predictions[0][node_id]
 				txt.insert(tk.END,'%s (score = %.5f)' % (human_string, score) + "\n")
         
-#function to detect potato leaves
-def takePicP():
-		# grab the current timestamp and use it to construct the
-		# output path
-		ts = datetime.datetime.now()
-		filename = "{}.jpg".format(ts.strftime("%Y-%m-%d_%H-%M-%S"))
-		p = os.path.sep.join((outputPath, filename))
- 
-		# save the file
-		cv2.imwrite(p, frame.copy())
-		txt.delete(1.0, tk.END)
-		txt.insert(tk.END,"[INFO] saved {}".format(filename)+"\n")
-		
-		#recognition code
-		image_path = filename
-		image_data = tf.gfile.FastGFile(image_path, 'rb').read()
-		label_lines = [line.rstrip() for line 
-                   in tf.gfile.GFile("potato/retrained_labels.txt")]
-				   
-		# Unpersists graph from file
-		with tf.gfile.FastGFile("potato/retrained_graph.pb", 'rb') as f:
-			graph_def = tf.GraphDef()
-			graph_def.ParseFromString(f.read())
-			tf.import_graph_def(graph_def, name='')				   
-		
-		with tf.Session() as sess:
-			# Feed the image_data as input to the graph and get first prediction
-			softmax_tensor = sess.graph.get_tensor_by_name('final_result:0')
-			
-			predictions = sess.run(softmax_tensor, \
-					 {'DecodeJpeg/contents:0': image_data})
-			
-			# Sort to show labels of first prediction in order of confidence
-			top_k = predictions[0].argsort()[-len(predictions[0]):][::-1]
-			
-			for node_id in top_k:
-				human_string = label_lines[node_id]
-				score = predictions[0][node_id]
-				txt.insert(tk.END,'%s (score = %.5f)' % (human_string, score) + "\n")
-
 
 def stop():
     # set the stop event, cleanup the camera, and allow the rest of
@@ -230,20 +190,17 @@ panel=None
 
 
 #buttons
-btn1 = tk.Button(root, text="Start \n Tomato", command=lambda: multifunction(takePicT, pause),height=2,width=7)
-btn4 = tk.Button(root, text="Start \n Potato", command=lambda: multifunction(takePicP, pause),height=2,width=7)
+btn1 = tk.Button(root, text="Start", command=lambda: multifunction(takePic, pause),height=2,width=7)
 #btn1.pack(side="bottom", padx=5,pady=5)
 btn2 = tk.Button(root, text="Quit",command=stop,height=2,width=7)
 btn3=tk.Button(root,text="Continue",command=play,height=2,width=7)
-
 #btn2.pack(side="bottom",padx=5,pady=5)
 btn1.grid(row=1,column=0,rowspan=1,columnspan=1,sticky=tk.W+tk.E+tk.N+tk.S)
 btn2.grid(row=4,column=0,rowspan=1,columnspan=1,sticky=tk.W+tk.E+tk.N+tk.S)
 btn3.grid(row=1,column=0,rowspan=1,columnspan=1,sticky=tk.W+tk.E+tk.N+tk.S)
-btn4.grid(row=2,column=0,rowspan=1,columnspan=1,sticky=tk.W+tk.E+tk.N+tk.S)
 btn3.grid_remove()
 txt=tk.Text(root,height=20,width=30)
-txt.grid(row=1,column=7,rowspan=6,columnspan=4,sticky=tk.W+tk.E+tk.N+tk.S)
+txt.grid(row=1,column=7,rowspan=6,columnspan=3,sticky=tk.W+tk.E+tk.N+tk.S)
 txt.insert(tk.END,"Welcome\nto the\nTreeDoc\n\n\n\nPlease place a \nspecimen under \nthe image sensor\nand click start\n")
 
 #video stream
