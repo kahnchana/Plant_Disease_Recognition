@@ -1,5 +1,6 @@
 # Plant_Disease_Recognition
-Raspberry Pi based system to detect and recognize plant diseases.
+Raspberry Pi based system to detect and recognize plant diseases. Protoype device below:
+https://youtu.be/SQslmbeOhpQ
 
 ## Dependencies
 * Raspberry Pi 3
